@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -Ap | awk 'BEGIN{ORS=", "; printf "./, ../, "} {if ($0 != "./") if ($0 != "../") print $0}' | sed 's/, $/\n/'
+echo -e "${ls -a} ,"
