@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -Ap | awk 'BEGIN{printf "./, ../, "}{if ($0 != "./" && $0 != "../") printf "%s, ", $0}' | sed 's/, $/\n/'
+ls -Ap | awk 'BEGIN{ORS=", "; printf "./, ../, "} {if ($0 != "./") if ($0 != "../") print $0}' | sed 's/, $/\n/'
