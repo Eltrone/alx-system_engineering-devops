@@ -1,2 +1,2 @@
 #!/bin/bash
-echo -e "${ls -a | tr '\n' ','}"
+echo "${ls -a | sed -e 's/\n/,/g' | sed -e '1i.,..'}"
