@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "${ls -a | sed -e 's/\n/,/g' | sed -e '1i.,..'}"
+ls -Ap | awk 'BEGIN {printf "./, ../,"} {printf $0 (substr($0,length) == "/" ? "" : "") ","}' | sed 's/,$/\n/'
