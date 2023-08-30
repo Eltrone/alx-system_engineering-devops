@@ -1,2 +1,2 @@
 #!/bin/bash
-echo -e "${ls -a} ,"
+echo -e "${ls -a | tr '\n' ','}"
