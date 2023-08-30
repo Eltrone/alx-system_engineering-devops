@@ -1,2 +1,2 @@
 #!/bin/bash
-echo -n "./, ../, "; ls -Ap | grep -v "/\./\|/\.\./" | tr '\n' ',' | sed 's/,$/\n/'
+ls -Ap | awk 'BEGIN{printf "./, ../, "}{if ($0 != "./" && $0 != "../") printf "%s, ", $0}' | sed 's/, $/\n/'
