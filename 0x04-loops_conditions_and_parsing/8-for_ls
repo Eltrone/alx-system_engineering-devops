@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This script displays the content of the current directory, showing only the part of the name after the first dash
+
+for file in *
+do
+    echo "$file" | cut -d '-' -f 2-
+done
