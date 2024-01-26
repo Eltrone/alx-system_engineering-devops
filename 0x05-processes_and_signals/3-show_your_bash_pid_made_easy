@@ -1,8 +1,4 @@
 #!/usr/bin/env bash
-# Ce script affiche le PID et le nom des processus dont le nom contient 'bash'
+# displays the PID and name of processes containing 'bash'
 
-for pid in /proc/[0-9]*; do
-    if grep -q "bash" "$pid/cmdline"; then
-        echo "$(basename "$pid") $(grep -z "^" "$pid/cmdline")"
-    fi
-done
+pgrep bash -l
