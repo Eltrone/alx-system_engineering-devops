@@ -25,7 +25,7 @@ int main(void)
 {
 	pid_t pid;
 	int i;
-	
+
 	for (i = 0; i < 5; i++)
 	{
 		pid = fork();
@@ -43,8 +43,8 @@ int main(void)
 			return (1);
 		}
 	}
-	
+
 	infinite_while();
-	
+
 	return (0);
 }
