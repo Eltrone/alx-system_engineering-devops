@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Ce script crée un fichier PID, affiche un message indéfiniment, gère différents signaux et supprime le fichier PID avant de se terminer
+
+# Création du fichier PID
+echo $$ > /var/run/myscript.pid
+
+# Gestionnaire pour SIGTERM
+trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit' SIGTERM
+
+# Gestionnaire pour SIGINT
+trap 'echo "Y U no love me?!"' SIGINT
+
+# Gestionnaire pour SIGQUIT
+trap 'rm -f /var/run/myscript.pid; exit' SIGQUIT
+
+# Boucle infinie
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+done
