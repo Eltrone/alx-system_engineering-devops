@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 #Ce script affiche la liste des processus en cours d'exécution pour tous les users
 
-ps -ef --forest
+ps -auxf
