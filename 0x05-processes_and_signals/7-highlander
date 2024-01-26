@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Ce script affiche 'To infinity and beyond' indéfiniment et 'I am invincible!!!' lors de la réception d'un signal SIGTERM
+
+# Définition du gestionnaire de signal pour SIGTERM
+trap 'echo "I am invincible!!!"' SIGTERM
+
+# Boucle infinie
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+done
