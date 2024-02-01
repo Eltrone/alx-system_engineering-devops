@@ -1,0 +1,1 @@
+#!/usr/bin/env bash\n# Vérifie si un hôte est en ligne en utilisant ping\nif [ "$#" -ne 1 ]; then\n    echo "Usage: $0 {IP_ADDRESS}"\n    exit 1\nfi\n\nping -c 5 $1
