@@ -1,1 +1,7 @@
-#!/usr/bin/env bash\n# Affiche les sockets en écoute et leur programme associé\nss -tuln | awk 'NR>1 {print \$1, \$4, \$6}' | while read proto address state; do\n    pid=$(sudo netstat -tulnp | grep "$address" | awk '{print \$7}' | cut -d'/' -f1)\n    program=$(sudo netstat -tulnp | grep "$address" | awk '{print \$7}' | cut -d'/' -f2)\n    echo "$proto $address $state $pid/$program"\ndone
+#!/usr/bin/env bash
+# Affiche les sockets en écoute et leur programme associé
+ss -tuln | awk 'NR>1 {print $1, $4, $6}' | while read proto address state; do
+    pid=$(sudo netstat -tulnp | grep "$address" | awk '{print $7}' | cut -d'/' -f1)
+    program=$(sudo netstat -tulnp | grep "$address" | awk '{print $7}' | cut -d'/' -f2)
+    echo "$proto $address $state $pid/$program"
+done
