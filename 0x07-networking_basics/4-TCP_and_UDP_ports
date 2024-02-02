@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# Affiche les sockets en écoute et leur programme associé
-netstat -tulnp | grep LISTEN
+# Ce script affiche les ports en écoute en utilisant netstat et montre le PID et le nom du programme associé à chaque socket.
+
+netstat -lp
