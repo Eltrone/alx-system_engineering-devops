@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Ajoute ou met à jour les résolutions pour localhost et facebook.com dans /etc/hosts
+
+# Sauvegarde du fichier /etc/hosts original
+sudo cp /etc/hosts /etc/hosts.backup
+
+# Ajout ou mise à jour des résolutions
+{
+    grep -vE 'localhost|facebook.com' /etc/hosts
+    echo "127.0.0.2 localhost"
+    echo "8.8.8.8 facebook.com"
+} | sudo tee /etc/hosts > /dev/null

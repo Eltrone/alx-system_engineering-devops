@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Affiche toutes les adresses IP IPv4 actives sur la machine
+
+# Vérifie si la commande ip est disponible
+if command -v ip > /dev/null 2>&1; then
+    # Utilise la commande ip pour obtenir les adresses IPv4 et les filtre avec awk
+    ip -4 addr show | awk '/inet/ && !/127.0.0.1/ {print $2}' | cut -d'/' -f1
+    # Affiche également l'adresse localhost
+    echo "127.0.0.1"
+else
+    # Si la commande ip n'est pas disponible, utilise ifconfig comme secours
+    ifconfig | awk '/inet addr:/ {print substr($2,6)}' | grep -v "127.0.0.1"
+    # Affiche également l'adresse localhost
+    echo "127.0.0.1"
+fi
