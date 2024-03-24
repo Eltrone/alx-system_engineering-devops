@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
 # Se connecte au serveur en utilisant une clé privée
-ssh -i ~/.ssh/school ubuntu@adresse_ip_du_serveur
+
+ssh -i ~/.ssh/school ubuntu@100.24.72.58
+
