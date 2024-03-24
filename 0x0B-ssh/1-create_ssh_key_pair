@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Ce script crée une paire de clés RSA.
+
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/school -C "user@hostname" -N "betty"

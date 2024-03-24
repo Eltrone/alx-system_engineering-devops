@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Ce script se connecte au serveur en utilisant la clé privée ~/.ssh/school avec l'utilisateur ubuntu.
+
+ssh -i ~/.ssh/school ubuntu@IP_DU_SERVEUR
