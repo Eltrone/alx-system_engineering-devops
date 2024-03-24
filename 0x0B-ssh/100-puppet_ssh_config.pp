@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+include stdlib
+
 file_line { 'Declare identity file':
   ensure => present,
   path   => '/etc/ssh/ssh_config',
