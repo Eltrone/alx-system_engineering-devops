@@ -1,4 +1,4 @@
-Host nom_hôte
+Host 528728-web-01
     HostName IP_DU_SERVEUR
     User ubuntu
     IdentityFile ~/.ssh/school
