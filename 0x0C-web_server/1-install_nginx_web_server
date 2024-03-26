@@ -1,0 +1,14 @@
+#!/bin/bash
+# Ce script installe et configure nginx sur une machine Ubuntu pour répondre avec "Hello World!" sur le port 80
+
+# Installer nginx
+apt-get update
+apt-get install nginx -y
+
+# Désactiver l'utilisation de systemctl pour redémarrer nginx dans ce script
+# Configuration de nginx pour répondre avec "Hello World!"
+echo "Hello World!" > /var/www/html/index.html
+
+# Redémarrage de nginx pour appliquer les changements
+nginx -s reload
+
