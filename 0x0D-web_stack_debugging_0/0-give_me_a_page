@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Installe Apache si nécessaire et configure la page d'accueil
+apt-get update
+apt-get install -y apache2 # Installe Apache si ce n'est pas déjà fait
+service apache2 start # Démarrer Apache
+echo "Hello Holberton" > /var/www/html/index.html # Créer/modifier la page d'accueil
