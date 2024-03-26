@@ -1,14 +1,17 @@
-#!/bin/bash
-# Ce script transfère un fichier d'un client à un serveur via SCP
+#!/usr/bin/env bash
+# This script transfers a file from our client to a server using scp
 
+# Checking if the correct number of arguments is passed
 if [ "$#" -lt 4 ]; then
     echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
     exit 1
 fi
 
+# Assigning the passed arguments to variables
 PATH_TO_FILE=$1
 IP=$2
 USERNAME=$3
 PATH_TO_SSH_KEY=$4
 
-scp -i "${PATH_TO_SSH_KEY}" -o StrictHostKeyChecking=no "${PATH_TO_FILE}" "${USERNAME}@${IP}:~/"
+# Transferring the file to the server
+scp -i "$PATH_TO_SSH_KEY" -o StrictHostKeyChecking=no "$PATH_TO_FILE" "$USERNAME@$IP:~/"
