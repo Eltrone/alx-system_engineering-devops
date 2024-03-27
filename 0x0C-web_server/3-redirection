@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# This script installs, configures, and starts the Nginx server.
-# It begins by updating the package lists for APT.
-# Install Nginx with the -y flag for non-interactive installation.
-# Allow HTTP traffic through the firewall for Nginx.
-# Create a directory for the web files and set permissions.
-# Create a simple 'Hello World!' index file.
-# Write the server configuration to the default Nginx configuration file.
-# Restarting Nginx service
+# This script installs, configures, and starts the Nginx server
+# Begins by updating the package lists for APT
+# Installs Nginx with the -y flag for non-interactive installation
+# Allows HTTP traffic through the firewall for Nginx
+# Creates a directory for the web files and sets permissions
+# Creates a simple 'Hello World!' index file
+# Writes the server configuration to the default Nginx configuration file
+# Restarts Nginx service
 
 apt-get update
 apt-get -y install nginx
