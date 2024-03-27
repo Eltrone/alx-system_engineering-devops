@@ -1,15 +1,25 @@
-#!/bin/bash
-# Ce script installe et configure nginx sur une machine Ubuntu 
-# pour répondre avec "Hello World!" sur le port 80
+#!/usr/bin/env bash
+#
+# Description:
+#   This script installs the Nginx web server on the server. It also ensures
+#   that Nginx is set to listen on port 80. Additionally, it replaces the default
+#   HTML file's content with a "Hello World!" message.
+#
 
-# Installer nginx
-sudo apt-get update
-sudo apt-get install nginx -y
+# Updates the package index to ensure downloading the latest versions.
+sudo apt-get -y update
 
-# Désactiver l'utilisation de systemctl pour redémarrer nginx dans ce script
-# Configuration de nginx pour répondre avec "Hello World!"
-echo "Hello World!" > /var/www/html/index.html
+# Proceeds with the installation of the Nginx web server.
+sudo apt-get -y install nginx
 
-# Redémarrage de nginx pour appliquer les changements
-nginx -s reload
+# Configures the firewall to allow incoming traffic on port 80, used by HTTP.
+sudo ufw allow "Nginx HTTP"
 
+# Changes the owner of the default HTML file to allow easy editing by the current user.
+sudo chown -R $USER:$USER /var/www/html/index.nginx-debian.html
+
+# Inserts the text "Hello World!" into the HTML file to personalize the default web page.
+sudo echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# Restarts the Nginx service to apply changes.
+sudo service nginx restart
