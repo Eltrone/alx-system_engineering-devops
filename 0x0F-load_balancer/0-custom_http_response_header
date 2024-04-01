@@ -1,12 +1,31 @@
-e script configure Nginx pour ajouter un en-tête HTTP personnalisé X-Served-By
+e script configure Nginx pour retourner un en-tête HTTP personnalisé sur les requêtes HTTP.
+# Il vérifie d'abord si Nginx est déjà installé et procède à son installation si nécessaire.
+# Il configure ensuite Nginx pour ajouter l'en-tête personnalisé et crée une page index.html simple.
 
-# Installation de Nginx si ce n'est pas déjà fait
-sudo apt-get update
-sudo apt-get install -y nginx
+# Mise à jour des dépôts de paquets
+sudo apt-get update -y
 
-# Configuration de Nginx pour ajouter l'en-tête personnalisé
-HOSTNAME=$(hostname)
-sudo sed -i "/server_name _;/a \\tadd_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default
+# Vérification de l'installation de Nginx et installation si nécessaire
+if ! command -v nginx > /dev/null; then
+    sudo apt-get install -y nginx
+fi
 
-# Redémarrage de Nginx pour appliquer les modifications
+# Autorisation du trafic HTTP pour Nginx via ufw (à ajuster selon les besoins de sécurité)
+sudo ufw allow 'Nginx HTTP'
+
+# Ajustement des permissions du répertoire web pour une accessibilité générale
+sudo chmod -R 755 /var/www
+
+# Ajout d'un en-tête HTTP personnalisé à la configuration de Nginx
+custom_header="add_header X-Served-By $HOSTNAME;"
+nginx_conf="/etc/nginx/sites-available/default"
+sudo sed -i "/listen 80 default_server;/a $custom_header" "$nginx_conf"
+
+# Création d'un fichier index.html avec un message simple
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
+
+# Création d'un fichier 404.html avec un message personnalisé
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+
+# Redémarrage du service Nginx pour appliquer les modifications
 sudo systemctl restart nginx
