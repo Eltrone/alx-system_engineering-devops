@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Ce script effectue le transfert d'un fichier du client vers un serveur en utilisant scp
+
+# Vérifie si tous les paramètres nécessaires sont fournis
+if [ "$#" -lt 4 ]; then
+    echo "Utilisation : $0 CHEMIN_DU_FICHIER IP UTILISATEUR CHEMIN_DE_LA_CLE_SSH"
+    exit 1
+fi
+
+# Extrait les paramètres
+file_path="$1"
+server_ip="$2"
+username="$3"
+ssh_key="$4"
+
+# Effectue le transfert du fichier en utilisant scp
+scp -o StrictHostKeyChecking=no -i "$ssh_key" "$file_path" "$username@$server_ip":~/
+
+# Vérifie si le transfert a été réussi
+if [ "$?" -eq 0 ]; then
+    echo "Fichier transféré avec succès"
+else
+    echo "Erreur : Échec du transfert du fichier"
+fi

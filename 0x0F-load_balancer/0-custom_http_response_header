@@ -1,9 +1,29 @@
-s script configures Nginx to include a custom HTTP response header
+#!/usr/bin/env bash
+# Script Bash pour configurer Nginx afin de retourner un en-tête personnalisé sur les requêtes HTTP.
 
-# Install Nginx
-sudo apt-get update
+# Met à jour les dépôts de paquets
+sudo apt-get -y update
+
+# Installe Nginx
 sudo apt-get -y install nginx
 
-# Configure custom HTTP response header
-echo "add_header X-Served-By \$hostname;" | sudo tee -a /etc/nginx/sites-available/default
-sudo systemctl restart nginx
+# Permet le trafic HTTP de Nginx à travers le pare-feu
+ufw allow 'Nginx HTTP'
+
+# Ajuste les permissions du répertoire web
+chmod -R 755 /var/www
+
+# Ajoute un en-tête personnalisé à la configuration de Nginx
+custom_header="add_header X-Served-By \$HOSTNAME;"
+nginx_conf="/etc/nginx/sites-available/default"
+sudo sed -i "6i\\$custom_header" "$nginx_conf"
+
+# Crée index.html avec le message "Hello World!"
+echo "Hello World!" | sudo tee /var/www/html/index.html >/dev/null
+
+# Crée 404.html avec un message personnalisé
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html >/dev/null
+
+# Démarre ou redémarre le service Nginx en fonction de son état
+service nginx restart
+
