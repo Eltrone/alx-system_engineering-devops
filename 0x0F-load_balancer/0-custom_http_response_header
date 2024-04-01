@@ -1,4 +1,5 @@
-sh script to configure Nginx to return a custom header on HTTP requests.
+#!/usr/bin/env bash
+# Bash script to configure Nginx to return a custom header on HTTP requests.
 
 # Update package repositories
 sudo apt-get -y update
