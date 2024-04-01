@@ -40,8 +40,8 @@ frontend main
 
 backend webservers
     balance roundrobin
-    server web01 [STUDENT_ID]-web-01:80 check
-    server web02 [STUDENT_ID]-web-02:80 check
+    server web01 528728-web-01:80 check
+    server web02 528728-web-02:80 check
 EOF
 
 # Restart HAProxy
