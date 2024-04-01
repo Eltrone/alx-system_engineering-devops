@@ -1,4 +1,4 @@
-nifeste Puppet pour la configuration de Nginx avec un en-tête HTTP personnalisé
+# Manifeste Puppet pour la configuration de Nginx avec un en-tête HTTP personnalisé
 
 # Met à jour la liste des paquets
 exec { 'update_package_lists':
