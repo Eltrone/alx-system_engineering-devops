@@ -1,32 +1,27 @@
-#!/usr/bin/env bash
-# Ce script configure Nginx pour retourner un en-tête HTTP personnalisé sur les requêtes HTTP.
-# Il vérifie d'abord si Nginx est déjà installé et procède à son installation si nécessaire.
-# Il configure ensuite Nginx pour ajouter l'en-tête personnalisé et crée une page index.html simple.
+sh script to configure Nginx to return a custom header on HTTP requests.
 
-# Mise à jour des dépôts de paquets
-sudo apt-get update -y
+# Update package repositories
+sudo apt-get -y update
 
-# Vérification de l'installation de Nginx et installation si nécessaire
-if ! command -v nginx > /dev/null; then
-    sudo apt-get install -y nginx
-fi
+# Install Nginx
+sudo apt-get -y install nginx
 
-# Autorisation du trafic HTTP pour Nginx via ufw (à ajuster selon les besoins de sécurité)
-sudo ufw allow 'Nginx HTTP'
+# Allow Nginx HTTP traffic through the firewall
+ufw allow 'Nginx HTTP'
 
-# Ajustement des permissions du répertoire web pour une accessibilité générale
-sudo chmod -R 755 /var/www
+# Adjust permissions of web directory
+chmod -R 755 /var/www
 
-# Ajout d'un en-tête HTTP personnalisé à la configuration de Nginx
+# Add custom header to Nginx configuration
 custom_header="add_header X-Served-By $HOSTNAME;"
 nginx_conf="/etc/nginx/sites-available/default"
-sudo sed -i "/listen 80 default_server;/a $custom_header" "$nginx_conf"
+sudo sed -i "6i\\${custom_header}" "$nginx_conf"
 
-# Création d'un fichier index.html avec un message simple
-echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
+# Create index.html with "Hello World!" message
+echo "Hello World!" | sudo tee /var/www/html/index.html >/dev/null
 
-# Création d'un fichier 404.html avec un message personnalisé
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+# Create 404.html with custom message
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html >/dev/null
 
-# Redémarrage du service Nginx pour appliquer les modifications
-sudo systemctl restart nginx
+# Start or restart Nginx service based on its status
+service nginx restart
