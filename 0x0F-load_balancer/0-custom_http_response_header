@@ -1,11 +1,12 @@
-#!/usr/bin/env bash
-# Script that configures Nginx to include custom HTTP response header
+e script configure Nginx pour ajouter un en-tête HTTP personnalisé X-Served-By
 
-# Install Nginx
+# Installation de Nginx si ce n'est pas déjà fait
 sudo apt-get update
-sudo apt-get -y install nginx
+sudo apt-get install -y nginx
 
-# Configure custom HTTP response header
-echo "add_header X-Served-By \$hostname;" | sudo tee -a /etc/nginx/sites-available/default
+# Configuration de Nginx pour ajouter l'en-tête personnalisé
+HOSTNAME=$(hostname)
+sudo sed -i "/server_name _;/a \\tadd_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default
+
+# Redémarrage de Nginx pour appliquer les modifications
 sudo systemctl restart nginx
-
