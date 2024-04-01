@@ -1,7 +1,4 @@
-# 2-puppet_custom_http_response_header.pp
-#
 # Ce manifeste Puppet configure Nginx pour ajouter un en-tête HTTP personnalisé
-# "X-Served-By" avec la valeur du nom d'hôte du serveur sur lequel Nginx s'exécute.
 
 class nginx_custom_header {
   # Assurez-vous que le service Nginx est installé et en cours d'exécution.
