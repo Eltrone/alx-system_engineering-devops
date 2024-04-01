@@ -1,4 +1,5 @@
-e script configure Nginx pour retourner un en-tête HTTP personnalisé sur les requêtes HTTP.
+#!/usr/bin/env bash
+# Ce script configure Nginx pour retourner un en-tête HTTP personnalisé sur les requêtes HTTP.
 # Il vérifie d'abord si Nginx est déjà installé et procède à son installation si nécessaire.
 # Il configure ensuite Nginx pour ajouter l'en-tête personnalisé et crée une page index.html simple.
 
