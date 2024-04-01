@@ -3,11 +3,12 @@
 
 # Install HAProxy
 sudo apt-get update
+sudo apt-get -y upgrade
 sudo apt-get -y install haproxy
 
 # Configure HAProxy
-sudo mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup
-sudo cat <<EOF | sudo tee /etc/haproxy/haproxy.cfg
+server_config=\
+"
 global
     log /dev/log    local0
     log /dev/log    local1 notice
@@ -17,6 +18,10 @@ global
     user haproxy
     group haproxy
     daemon
+    ca-base /etc/ssl/certs
+    crt-base /etc/ssl/private
+    ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
+    ssl-default-bind-options no-sslv3
 
 defaults
     log     global
@@ -34,15 +39,21 @@ defaults
     errorfile 503 /etc/haproxy/errors/503.http
     errorfile 504 /etc/haproxy/errors/504.http
 
-frontend main
-    bind *:80
-    default_backend webservers
+frontend load_balancer
+        bind *:80
+        mode http
+        default_backend webservers
 
 backend webservers
-    balance roundrobin
-    server web01 528728-web-01:80 check
-    server web02 528728-web-02:80 check
-EOF
+        balance roundrobin
+        server 520532-web-01 52.23.177.252:80 check
+        server 520532-web-02 18.204.7.7:80 check
+"
+echo "$server_config" | sudo tee -a /etc/haproxy/haproxy.cfg
 
-# Restart HAProxy
-sudo systemctl restart haproxy
+# Activation de HAproxy pour le démarrage par le script init.
+echo "ENABLED=1" | sudo tee -a /etc/default/haproxy
+
+# Configuration pour que HAproxy soit gérable via un script init.
+sudo systemctl enable haproxy
+sudo service haproxy restart
