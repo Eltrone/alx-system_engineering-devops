@@ -1,28 +1,28 @@
-# Ce manifeste Puppet configure Nginx pour ajouter un en-tête HTTP personnalisé
+nifeste Puppet pour la configuration de Nginx avec un en-tête HTTP personnalisé
 
-class nginx_custom_header {
-  # Assurez-vous que le service Nginx est installé et en cours d'exécution.
-  package { 'nginx':
-    ensure => installed,
-  }
-
-  service { 'nginx':
-    ensure     => running,
-    enable     => true,
-    require    => Package['nginx'],
-  }
-
-  # Définissez le nom d'hôte du serveur comme une variable.
-  $hostname = $::fqdn
-
-  # Configurez Nginx pour ajouter l'en-tête HTTP personnalisé.
-  file { '/etc/nginx/conf.d/custom_header.conf':
-    ensure  => file,
-    content => template('nginx/custom_header.erb'), 
-    notify  => Service['nginx'],
-  }
+# Met à jour la liste des paquets
+exec { 'update_package_lists':
+  command => '/usr/bin/apt-get update',
+  unless  => '/usr/bin/apt-get -qq update | /bin/grep -q "All packages are up to date"',
 }
 
-# Appliquez la classe définie ci-dessus pour effectuer la configuration.
-include nginx_custom_header
+# Assure que le paquet Nginx est installé
+package { 'nginx':
+  ensure  => 'installed',
+  require => Exec['update_package_lists'],
+}
 
+# Définit un en-tête HTTP personnalisé dans un fichier séparé
+file { '/etc/nginx/conf.d/custom_headers.conf':
+  ensure  => 'file',
+  content => "add_header X-Served-By ${::hostname};",
+  notify  => Service['nginx'],
+}
+
+# Gère le service Nginx
+service { 'nginx':
+  ensure    => 'running',
+  enable    => true,
+  require   => Package['nginx'],
+  subscribe => File['/etc/nginx/conf.d/custom_headers.conf'],
+}
