@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-# Script pour afficher les informations DNS des sous-domaines d'un domaine donné
+cript pour afficher les informations DNS des sous-domaines d'un domaine donné
 
 # Fonction pour obtenir les informations DNS d'un sous-domaine
 get_dns_info() {
@@ -7,8 +6,8 @@ get_dns_info() {
     local subdomain=$2
     local full_domain="$subdomain.$domain"
     
-    # Utilisation de dig pour obtenir l'adresse IP du sous-domaine
-    local ip_address=$(dig +short $full_domain)
+    # Utilisation de dig avec un serveur DNS public pour obtenir l'adresse IP du sous-domaine
+    local ip_address=$(dig @8.8.8.8 +short $full_domain)
     
     # Vérifie si une adresse IP a été trouvée
     if [ -z "$ip_address" ]; then
@@ -36,4 +35,3 @@ else
         get_dns_info $domain $sub
     done
 fi
-
