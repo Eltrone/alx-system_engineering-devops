@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# Display domain or subdomain information
+
+# Fonction pour afficher les informations du sous-domaine
+get_info() {
+    domain=$1
+    subdomain=$2
+    # Utilisation de dig pour obtenir les informations DNS et de awk pour filtrer la sortie
+    info=$(dig +short $subdomain.$domain A)
+    if [[ ! -z "$info" ]]; then
+        echo "The subdomain $subdomain is a A record and points to $info"
+    else
+        echo "No A record found for $subdomain.$domain"
+    fi
+}
+
+# Vérification du nombre d'arguments
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 domain [subdomain]"
+    exit 1
+fi
+
+domain=$1
+
+# Si seulement le domaine est fourni
+if [ $# -eq 1 ]; then
+    # Appel de la fonction get_info pour chaque sous-domaine prédéfini
+    for sub in www lb-01 web-01 web-02; do
+        get_info $domain $sub
+    done
+else
+    # Si un sous-domaine est également fourni
+    subdomain=$2
+    get_info $domain $subdomain
+fi
