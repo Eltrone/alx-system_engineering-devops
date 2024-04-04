@@ -1,4 +1,5 @@
-cript pour afficher les informations DNS des sous-domaines d'un domaine donné
+#!/usr/bin/env bash
+# Script pour afficher les informations DNS des sous-domaines d'un domaine donné
 
 # Fonction pour obtenir les informations DNS d'un sous-domaine
 get_dns_info() {
