@@ -1,36 +1,43 @@
 #!/usr/bin/env bash
+# This script provides information about subdomains
 
-#THe script affiche des informations sur les sous-domaines d'un domaine donné.
+# Function to retrieve and display DNS information for a subdomain
+get_dns_info() {
+    if [ $# -ne 2 ]; then
+        echo "Error: Invalid number of arguments in get_dns_info function"
+        exit 1
+    fi
 
-# Fonction pour afficher les informations sur un sous-domaine spécifique
-print_subdomain_info() {
-    local subdomain="$1"
-    local domain="$2"
-    dig_output=$(dig "$subdomain.$domain" | awk '/^;; ANSWER SECTION:$/,/^$/ {if ($1 == subdomain "." domain ".") print "The subdomain", subdomain, "is a", $4, "record and points to", $5}')
-    echo "$dig_output"
-}
-
-# Fonction pour afficher les informations sur les sous-domaines par défaut
-print_default_subdomains_info() {
     local domain="$1"
-    print_subdomain_info "www" "$domain"
-    print_subdomain_info "lb-01" "$domain"
-    print_subdomain_info "web-01" "$domain"
-    print_subdomain_info "web-02" "$domain"
+    local subdomain="$2"
+
+    if [ -z "$domain" ] || [ -z "$subdomain" ]; then
+        echo "Error: Domain and subdomain cannot be empty"
+        exit 1
+    fi
+
+    dig_output=$(dig "$subdomain.$domain" | awk '/ANSWER SECTION/ {getline; print}')
+    record_type=$(echo "$dig_output" | awk '{print $4}')
+    destination=$(echo "$dig_output" | awk '{print $5}')
+    echo "The subdomain $subdomain is a $record_type record and points to $destination"
 }
 
-# Vérification des arguments
-if [ $# -eq 0 ]; then
+# Main script starts here
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
     echo "Usage: $0 domain [subdomain]"
     exit 1
 fi
 
 domain="$1"
-subdomain="$2"
 
-# Affichage des informations sur les sous-domaines
-if [ -z "$subdomain" ]; then
-    print_default_subdomains_info "$domain"
-else
-    print_subdomain_info "$subdomain" "$domain"
+# If only a domain is provided
+if [ $# -eq 1 ]; then
+    get_dns_info "$domain" "www"
+    get_dns_info "$domain" "lb-01"
+    get_dns_info "$domain" "web-01"
+    get_dns_info "$domain" "web-02"
+# If both a domain and a subdomain are provided
+elif [ $# -eq 2 ]; then
+    subdomain="$2"
+    get_dns_info "$domain" "$subdomain"
 fi
