@@ -1,38 +1,36 @@
 #!/usr/bin/env bash
-# Script pour afficher les informations DNS des sous-domaines d'un domaine donné
 
-# Fonction pour obtenir les informations DNS d'un sous-domaine
-get_dns_info() {
-    local domain=$1
-    local subdomain=$2
-    local full_domain="$subdomain.$domain"
-    
-    # Utilisation de dig avec un serveur DNS public pour obtenir l'adresse IP du sous-domaine
-    local ip_address=$(dig @8.8.8.8 +short $full_domain)
-    
-    # Vérifie si une adresse IP a été trouvée
-    if [ -z "$ip_address" ]; then
-        echo "Le sous-domaine $full_domain ne pointe vers aucune adresse IP."
-    else
-        echo "Le sous-domaine $full_domain est un enregistrement A et pointe vers $ip_address"
-    fi
+#THe script affiche des informations sur les sous-domaines d'un domaine donné.
+
+# Fonction pour afficher les informations sur un sous-domaine spécifique
+print_subdomain_info() {
+    local subdomain="$1"
+    local domain="$2"
+    dig_output=$(dig "$subdomain.$domain" | awk '/^;; ANSWER SECTION:$/,/^$/ {if ($1 == subdomain "." domain ".") print "The subdomain", subdomain, "is a", $4, "record and points to", $5}')
+    echo "$dig_output"
 }
 
-# Vérification du nombre d'arguments
-if [ $# -lt 1 ]; then
-    echo "Usage: $0 <domain> [subdomain]"
+# Fonction pour afficher les informations sur les sous-domaines par défaut
+print_default_subdomains_info() {
+    local domain="$1"
+    print_subdomain_info "www" "$domain"
+    print_subdomain_info "lb-01" "$domain"
+    print_subdomain_info "web-01" "$domain"
+    print_subdomain_info "web-02" "$domain"
+}
+
+# Vérification des arguments
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 domain [subdomain]"
     exit 1
 fi
 
-domain=$1
+domain="$1"
+subdomain="$2"
 
-# Si un sous-domaine est spécifié, affiche seulement ses informations
-if [ $# -eq 2 ]; then
-    subdomain=$2
-    get_dns_info $domain $subdomain
+# Affichage des informations sur les sous-domaines
+if [ -z "$subdomain" ]; then
+    print_default_subdomains_info "$domain"
 else
-    # Sinon, affiche les informations pour les sous-domaines par défaut
-    for sub in www lb-01 web-01 web-02; do
-        get_dns_info $domain $sub
-    done
+    print_subdomain_info "$subdomain" "$domain"
 fi
