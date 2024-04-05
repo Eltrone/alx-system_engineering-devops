@@ -3,4 +3,3 @@
 service nginx stop
 echo "" > /run/nginx.pid
 service nginx start
-
