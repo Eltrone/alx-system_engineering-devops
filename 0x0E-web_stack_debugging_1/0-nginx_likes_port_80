@@ -1,20 +1,9 @@
 #!/usr/bin/env bash
-# Ce script configure Nginx pour écouter sur le port 80
+# Automatise la correction du problème
 
-# Installer Nginx si ce n'est pas déjà installé
-if ! which nginx > /dev/null; then
-    apt-get update
-    apt-get install -y nginx
-fi
-
-# Corriger la configuration de Nginx pour éviter les écoutes en double
-sed -i '/listen \[::\]:80/d' /etc/nginx/sites-available/default
-sed -i '/listen 80;/d' /etc/nginx/sites-available/default
-echo "listen 80 default_server;" >> /etc/nginx/sites-available/default
-echo "listen [::]:80 default_server;" >> /etc/nginx/sites-available/default
-
-# S'assurer que Nginx est démarré. Utiliser 'service' au lieu de 'systemctl' pour une compatibilité maximale
-service nginx restart
-
-# Afficher le message de succès
-echo "Nginx a été configuré avec succès pour écouter sur le port 80."
+# Supprime le lien symbolique existant pour éviter les configurations en double
+sudo rm /etc/nginx/sites-enabled/default
+# Recrée le lien symbolique pour assurer la bonne configuration de Nginx
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Redémarre le service Nginx pour appliquer les changements
+sudo service nginx restart
