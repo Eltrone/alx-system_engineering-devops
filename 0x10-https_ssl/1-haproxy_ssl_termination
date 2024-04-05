@@ -1,36 +1,35 @@
-#!/usr/bin/env bash
+global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+    ca-base /etc/ssl/certs
+    crt-base /etc/ssl/private
+    ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:RSA+AESGCM:RSA+AES:!aNULL:!MD5:!DSS
+    ssl-default-bind-options no-sslv3
 
-# Display domain or subdomain information
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
 
-# Fonction pour afficher les informations du sous-domaine
-get_info() {
-    domain=$1
-    subdomain=$2
-    # Utilisation de dig pour obtenir les informations DNS et de awk pour filtrer la sortie
-    info=$(dig +short $subdomain.$domain A)
-    if [[ ! -z "$info" ]]; then
-        echo "The subdomain $subdomain is a A record and points to $info"
-    else
-        echo "No A record found for $subdomain.$domain"
-    fi
-}
+frontend front
+    bind *:80
+    mode http
+    default_backend backend
 
-# Vérification du nombre d'arguments
-if [ $# -lt 1 ]; then
-    echo "Usage: $0 domain [subdomain]"
-    exit 1
-fi
+frontend https
+    bind *:443 ssl crt /etc/haproxy/certs/www.eltrone.tech.pem
+    http-request set-header X-Forwarded-Proto https
+    default_backend backend
 
-domain=$1
-
-# Si seulement le domaine est fourni
-if [ $# -eq 1 ]; then
-    # Appel de la fonction get_info pour chaque sous-domaine prédéfini
-    for sub in www lb-01 web-01 web-02; do
-        get_info $domain $sub
-    done
-else
-    # Si un sous-domaine est également fourni
-    subdomain=$2
-    get_info $domain $subdomain
-fi
+backend backend
+    mode http
+    balance roundrobin
+    server web01 34.224.62.139:80 check
+    server web02 100.25.119.231:80 check
