@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # Corrige rapidement le problème avec Nginx sur le port 80
-service nginx stop
+if service nginx status; then
+    service nginx stop
+fi
 echo "" > /run/nginx.pid
 service nginx start
