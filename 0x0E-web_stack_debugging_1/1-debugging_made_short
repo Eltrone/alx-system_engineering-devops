@@ -1,0 +1,9 @@
+#!/usr/bin/env bashi
+
+# Corrige l'erreur "port 80: Connection refused"
+# Crée un lien symbolique de la configuration disponible vers la configuration activée, en écrasant tout lien existant
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Démarre le service Nginx
+service nginx start
+# Réinitialise le fichier PID de Nginx, permettant de démarrer le service sans erreurs de PID
+echo "" > /run/nginx.pid
