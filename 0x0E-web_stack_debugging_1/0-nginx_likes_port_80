@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Automatise la correction du problème
+
+# Supprime le lien symbolique existant pour éviter les configurations en double
+sudo rm /etc/nginx/sites-enabled/default
+# Recrée le lien symbolique pour assurer la bonne configuration de Nginx
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Redémarre le service Nginx pour appliquer les changements
+sudo service nginx restart
