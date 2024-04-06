@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # proxy configuration
 global
     log /dev/log    local0

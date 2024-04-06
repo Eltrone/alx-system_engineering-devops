@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # my code
 global
     log /dev/log    local0
