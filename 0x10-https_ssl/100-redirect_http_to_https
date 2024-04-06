@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # proxy configuration
 global
     log /dev/log    local0
@@ -39,7 +37,7 @@ frontend lb_01
     default_backend backend
 
 frontend https
-    bind *:443 ssl crt /etc/haproxy/certs/www.abdelhafid-mahmoudi.tech.pem
+    bind *:443 ssl crt /etc/haproxy/certs/www.eltrone.tech.pem
     http-request set-header X-Forwarded-Proto https
     default_backend backend
 
