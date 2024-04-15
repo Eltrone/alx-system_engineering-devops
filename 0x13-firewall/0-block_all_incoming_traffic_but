@@ -1,0 +1,21 @@
+# Installer UFW
+sudo apt-get install ufw
+
+# Activer UFW
+sudo ufw enable
+
+# Par défaut, bloquer tout le trafic entrant
+sudo ufw default deny incoming
+
+# Autoriser le trafic entrant sur le port 22 (SSH)
+sudo ufw allow 22/tcp
+
+# Autoriser le trafic entrant sur le port 443 (HTTPS SSL)
+sudo ufw allow 443/tcp
+
+# Autoriser le trafic entrant sur le port 80 (HTTP)
+sudo ufw allow 80/tcp
+
+# Vérifier les règles configurées
+sudo ufw status
+
