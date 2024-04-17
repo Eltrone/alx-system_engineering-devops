@@ -1,0 +1,7 @@
+[mysqld]
+server-id               = 2
+relay_log               = /var/log/mysql/mysql-relay-bin.log
+log_bin                 = /var/log/mysql/mysql-bin.log
+read_only               = 1
+# bind-address           = 127.0.0.1   # Comment this out if necessary
+
