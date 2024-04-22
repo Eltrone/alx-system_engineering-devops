@@ -1,18 +1,14 @@
 #!/usr/bin/python3
-""" script pour exporter la data dans un format JSON"""
-import json
+""" Gather_data_from_an_API """
 import requests
+import sys
 
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com/"
-    user_url = requests.get(url + "users").json()
+    user_url = requests.get(url + "users/{}".format(sys.argv[1])).json()
+    todo = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
 
-    with open("todo_all_employees.json", "w") as f:
-        json.dump({
-            a.get("id"): [{
-                "task": t.get("title"),
-                "completed": t.get("completed"),
-                "username": a.get("username")
-            } for t in requests.get(url + "todos",
-                                    params={"userId": a.get("id")}).json()]
-            for a in user_url}, f)
+    comp = [t.get("title") for t in todo if t.get("completed") is True]
+    print("Employee {} is done with tasks({}/{}):".format(
+        user_url.get("name"), len(comp), len(todo)))
+    [print("\t {}".format(c)) for c in comp]
