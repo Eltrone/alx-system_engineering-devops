@@ -19,5 +19,3 @@ if __name__ == "__main__":
         writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
         for task in todo_data:
             writer.writerow([user_id, username, task.get("completed"), task.get("title")])
-
-    print(f"Data exported to {csv_file}")
