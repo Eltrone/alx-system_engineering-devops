@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Gather_data_from_an_API """
-import requests
 import sys
+import requests
 
 if __name__ == "__main__":
     url = "https://jsonplaceholder.typicode.com/"
