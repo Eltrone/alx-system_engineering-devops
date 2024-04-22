@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-Script using a REST API, for a given employee ID, returns information about his/her TODO list progress.
+Script using a REST API, for given employee ID,
+returns information about his/her TODO list progress.
 """
 import requests
 import sys
@@ -22,7 +23,8 @@ if __name__ == "__main__":
         done_tasks = [task for task in todo_data if task.get('completed')]
         total_done_tasks = len(done_tasks)
 
-        print(f"Employee {employee_name} is done with tasks({total_done_tasks}/{total_tasks}):")
+        print(f"Employee {employee_name} is done with tasks "
+              f"({total_done_tasks}/{total_tasks}):")
         for task in done_tasks:
             print(f"\t{task.get('title')}")
     except Exception as e:
