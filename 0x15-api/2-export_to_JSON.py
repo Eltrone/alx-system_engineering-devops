@@ -12,27 +12,15 @@ if __name__ == "__main__":
     user_id = sys.argv[1]
 
     # Retrieve user data
-    user_response = requests.get(url + "users/{}".format(user_id))
-    user_data = user_response.json()
-    username = user_data.get("username")
+    user_response = requests.get(url + "users/{}".format(sys.argv[1])).json()
+    username = user_response.get("username")
 
     # Retrieve todo data for the user
-    todo_response = requests.get(url + "todos", params={"userId": user_id})
-    todo_data = todo_response.json()
+    todo = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
 
-    # Create dictionary to store JSON data
-    json_data = {user_id: []}
-
-    # Populate dictionary with todo data
-    for task in todo_data:
-        json_data[user_id].append({
-            "task": task.get("title"),
-            "completed": task.get("completed"),
+    with open("{}.json".format(user_id), "w", newline="") as f:
+        json.dump({user_id: [{
+            "task": t.get("title"),
+            "completed": t.get("completed"),
             "username": username
-        })
-
-    # Write data to JSON file
-    with open("{}.json".format(user_id), "w") as json_file:
-        json.dump(json_data, json_file)
-
-    print("Data exported to {}.json".format(user_id))
+            } for t in todo]}, f)
