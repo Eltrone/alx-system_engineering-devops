@@ -12,8 +12,8 @@ if __name__ == "__main__":
     user_id = sys.argv[1]
 
     # Retrieve user data
-    user_response = requests.get(url + "users/{}".format(sys.argv[1])).json()
-    username = user_response.get("username")
+    user_url = requests.get(url + "users/{}".format(sys.argv[1])).json()
+    username = user_url.get("username")
 
     # Retrieve todo data for the user
     todo = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
