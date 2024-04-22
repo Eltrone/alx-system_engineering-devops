@@ -1,18 +1,37 @@
 #!/usr/bin/python3
-""" script to export data in the JSON format """
 import json
 import requests
 
-if __name__ == "__main__":
-    url = "https://jsonplaceholder.typicode.com/"
-    user_url = requests.get(url + "users").json()
+def fetch_all_data():
+    """ Récupère les données de tous les utilisateurs et de toutes leurs tâches via l'API """
+    users_url = "https://jsonplaceholder.typicode.com/users"
+    todos_url = "https://jsonplaceholder.typicode.com/todos"
 
-    with open("todo_all_employees.json", "w") as f:
-        json.dump({
-            a.get("id"): [{
-                "task": t.get("title"),
-                "completed": t.get("completed"),
-                "username": a.get("username")
-            } for t in requests.get(url + "todos",
-                                    params={"userId": a.get("id")}).json()]
-            for a in user_url}, f)
+    users_response = requests.get(users_url)
+    todos_response = requests.get(todos_url)
+
+    users = users_response.json()
+    todos = todos_response.json()
+
+    user_dict = {user['id']: user['username'] for user in users}
+    tasks_dict = {user_id: [] for user_id in user_dict.keys()}
+
+    for todo in todos:
+        task_info = {
+            "username": user_dict[todo["userId"]],
+            "task": todo["title"],
+            "completed": todo["completed"]
+        }
+        tasks_dict[todo["userId"]].append(task_info)
+
+    return tasks_dict
+
+def export_all_to_json():
+    """ Exporte les données de toutes les tâches de tous les employés au format JSON """
+    tasks_dict = fetch_all_data()
+    with open("todo_all_employees.json", 'w') as jsonfile:
+        json.dump(tasks_dict, jsonfile)
+
+if __name__ == "__main__":
+    export_all_to_json()
+
