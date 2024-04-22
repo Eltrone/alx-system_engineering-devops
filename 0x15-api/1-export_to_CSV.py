@@ -5,16 +5,28 @@ import requests
 import sys
 
 if __name__ == "__main__":
-    base_url = "https://jsonplaceholder.typicode.com/"
+    # Base URL for the API
+    baseurl = "https://jsonplaceholder.typicode.com/"
+
+    # Extract user ID from command line argument
     user_id = sys.argv[1]
-    user_data = requests.get(f"{base_url}users/{user_id}").json()
-    todo_data = requests.get(f"{base_url}todos", params={"userId": user_id}).json()
 
+    # Retrieve user data
+    user_response = requests.get(baseeurl + "users/{}".format(user_id))
+    user_data = user_response.json()
     username = user_data.get("username")
-    csv_file = f"{user_id}.csv"
 
-    with open(csv_file, mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+    # Retrieve todo data for the user
+    todo_response = requests.get(baseurl + "todos", params={"userId": user_id})
+    todo_data = todo_response.json()
+
+    # Write data to CSV file
+    with open("{}.csv".format(user_id), "w", newline="") as csv_file:
+        csv_writer = csv.writer(csv_file, quoting=csv.QUOTE_ALL)
         for task in todo_data:
-            writer.writerow([user_id, username, task.get("completed"), task.get("title")])
+            csv_writer.writerow([
+                user_id,
+                username,
+                task.get("completed"),
+                task.get("title")
+            ])
