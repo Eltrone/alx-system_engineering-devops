@@ -5,16 +5,13 @@ import requests
 import sys
 
 if __name__ == "__main__":
-    # Base URL for the API
-    url = "https://jsonplaceholder.typicode.com/"
-
     # Extract user ID from command line argument
     user_id = sys.argv[1]
-
+    # Base URL for the API
+    url = "https://jsonplaceholder.typicode.com/"
     # Retrieve user data
     user_url = requests.get(url + "users/{}".format(sys.argv[1])).json()
     username = user_url.get("username")
-
     # Retrieve todo data for the user
     todo = requests.get(url + "todos", params={"userId": sys.argv[1]}).json()
 
