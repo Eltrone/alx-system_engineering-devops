@@ -1,14 +1,8 @@
 # Fix Apache error 500 for WordPress on LAMP
-file { '/path/to/the/problematic/file':
-  ensure => 'file',
-  owner  => 'www-data',
-  group  => 'www-data',
-  mode   => '0644',
-  source => 'puppet:///modules/module_name/problematic_file',
+
+exec { 'replace_php_string':
+  command => 'sed -i "s/phpp/php/g" /var/www/html/wp-settings.php',
+  unless  => 'grep -q "php" /var/www/html/wp-settings.php',
+  path    => ['/bin', '/usr/bin'],
 }
 
-exec { 'restart-apache':
-  command     => '/etc/init.d/apache2 restart',
-  refreshonly => true,
-  subscribe   => File['/path/to/the/problematic/file'],
-}
