@@ -1,20 +1,12 @@
-# Puppet manifest to optimize Nginx configuration to handle high load
-class nginx_optimization {
-  file { '/etc/nginx/nginx.conf':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('nginx/nginx.conf.erb'),
-    notify  => Service['nginx'],
-  }
-
-  service { 'nginx':
-    ensure    => running,
-    enable    => true,
-    subscribe => File['/etc/nginx/nginx.conf'],
-  }
+# Increase the maximum number of file descriptors for Nginx
+exec { 'increase-file-descriptors':
+  command => '/bin/sed -i "s/15/4096/" /etc/default/nginx',
+  path    => '/bin:/usr/bin',
 }
 
-include nginx_optimization
+# Restart Nginx to apply configuration changes
+exec { 'restart-nginx':
+  command => '/etc/init.d/nginx restart',
+  path    => '/etc/init.d',
+}
 
