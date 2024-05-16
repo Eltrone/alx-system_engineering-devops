@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# This script reloads the Gunicorn process gracefully without downtime
+
+# Get the Gunicorn master process PID
+GUNICORN_PID=$(pgrep -f "gunicorn --bind 0.0.0.0:5003")
+
+if [ -z "$GUNICORN_PID" ]; then
+    echo "Gunicorn master process not found."
+    exit 1
+fi
+
+# Send the HUP signal to the master process to reload workers gracefully
+kill -HUP "$GUNICORN_PID"
+
+echo "Gunicorn master process (PID: $GUNICORN_PID) reloaded gracefully."
